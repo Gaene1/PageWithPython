@@ -1,12 +1,19 @@
-import numpy as np
 import matplotlib.pyplot as plt
 
+fig, ax = plt.subplots()
 
-houses = ['Gryffindor', 'Ravenclaw', 'Slytherin', 'Hufflepuff']
-points = [715, 517, 470, 482]
+year_1 = [2016, 2017, 2018, 2019, 2020, 2021]
+population_1 = [42, 43, 45, 47, 48, 50]
 
-plt.bar(houses, points)
-plt.ylabel("Hogwarts Points")
-plt.xlabel("Hogwarts House")
-plt.title("Hogwarts House Points")
-plt
+year_2 = [2016, 2017, 2018, 2019, 2020, 2021]
+population_2 = [43, 43, 44, 44, 45, 45]
+
+plt.plot(year_1, population_1, marker='o', linestyle='--', color='g', label='Country 1')
+plt.plot(year_2, population_2,  marker='d', linestyle='-', color='r', label='Country 2')
+
+plt.xlabel('Year')
+plt.ylabel('Population (M)')
+plt.title('Year vs Population')
+plt.legend(loc='lower right')
+
+fig
