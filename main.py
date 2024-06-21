@@ -1,26 +1,34 @@
-# import panel as pn
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
 
-# pn.extension(sizing_mode="stretch_width")
+sns.set_theme()  # set default seaborn theme
 
-# slider = pn.widgets.FloatSlider(start=0, end=10, name='Amplitude')
+# Scatterplot with grouping
+x = np.random.normal(0, 1, 100)
+y = np.random.normal(0, 1, 100)
+group = np.random.choice(['A', 'B', 'C'], 100)
 
-# def callback(new):
-    # return f'Amplitude is: {new}'
+sns.scatterplot(x=x, y=y, hue=group, palette='viridis')
+plt.title('Seaborn Scatter Plot')
+plt.show()
+plt.savefig("figures/sns_basics.png")
+plt.close()
 
-# pn.Row(slider, pn.bind(callback, slider)).servable(target='simple_app')
-from PySide6.QtWidgets import QApplication, QWidget
+# Violinplot
+data = np.random.normal(0, 1, 100)
+groups = np.random.choice(['A', 'B'], 100)
 
-# Only needed for access to command line arguments
-import sys
+sns.violinplot(x=data, y=groups)
+plt.title("Seaborn Violinplot")
+plt.savefig("figures/sns_violinplot.png")
+plt.close()
 
-# You need one (and only one) QApplication instance per application.
-# Pass in sys.argv to allow command line arguments for your app.
-# If you know you won't use command line arguments QApplication([]) works too.
-app = QApplication(sys.argv)
+# Color palettes
+x = np.random.normal(0, 1, 200)
+y = np.random.normal(0, 1, 200)
+groups = np.random.choice(['A', 'B', 'C', 'D'], 200)
 
-# Create a Qt widget, which will be our window.
-window = QWidget()
-window.show()  # IMPORTANT!!!!! Windows are hidden by default.
-
-# Start the event loop.
-sys.exit(app.exec())
+sns.scatterplot(x=x, y=y, hue=groups, palette='rocket')
+plt.savefig("figures/sns_color_palette.png")
+plt.close()
