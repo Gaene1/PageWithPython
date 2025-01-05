@@ -1,0 +1,38 @@
+name: Add String to SQLite Database
+
+on:
+  repository_dispatch:
+    types: [add_string_to_db]  # Trigger on the custom event
+
+jobs:
+  add_string:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        pip install flask flask-sqlalchemy
+
+    - name: Add string to SQLite database
+      run: |
+        echo "from app import add_string_to_db" > add_string.py
+        python add_string.py
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        STRING_TO_ADD: ${{ github.event.client_payload.string }}
+
+    - name: Commit updated database to GitHub
+      run: |
+        git config --global user.email "your-email@example.com"
+        git config --global user.name "your-username"
+        git add database.db
+        git commit -m "Updated database with new string"
+        git push

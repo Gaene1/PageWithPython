@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQLite String Adder</title>
+</head>
+<body>
+    <h1>Add a String to SQLite Database</h1>
+
+    <form id="addStringForm">
+        <label for="stringInput">Enter String:</label>
+        <input type="text" id="stringInput" name="text" required>
+        <button type="submit">Add</button>
+    </form>
+
+    <p id="responseMessage"></p>
+
+    <script>
+        const form = document.getElementById('addStringForm');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent page reload on form submit
+
+            const stringValue = document.getElementById('stringInput').value;
+
+            // Send the input string to a GitHub Action (through a GitHub API or webhook)
+            try {
+                const response = await fetch('https://api.github.com/repos/yourusername/yourrepo/dispatches', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer YOUR_GITHUB_PERSONAL_ACCESS_TOKEN`
+                    },
+                    body: JSON.stringify({
+                        event_type: 'add_string_to_db',
+                        client_payload: {
+                            string: stringValue
+                        }
+                    })
+                });
+
+                if (response.ok) {
+                    document.getElementById('responseMessage').textContent = 'String added successfully!';
+                } else {
+                    document.getElementById('responseMessage').textContent = 'Failed to add string.';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('responseMessage').textContent = 'Error adding string.';
+            }
+        });
+    </script>
+</body>
+</html>

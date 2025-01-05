@@ -1,46 +1,32 @@
-from flask import Flask, render_template, request, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
+import sqlite3
 import os
-import subprocess
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+# Path to the SQLite database
+DB_PATH = 'database.db'
 
-class StringEntry(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(200), nullable=False)
+def add_string_to_db(string):
+    # Connect to the SQLite database (this will create it if it doesn't exist)
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
 
-# Initialize DB
-@app.before_first_request
-def init_db():
-    db.create_all()
+    # Create the table if it doesn't exist
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS strings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            text TEXT NOT NULL
+        )
+    ''')
 
-@app.route('/')
-def index():
-    entries = StringEntry.query.all()
-    return render_template('index.html', entries=entries)
+    # Insert the new string
+    cursor.execute('INSERT INTO strings (text) VALUES (?)', (string,))
 
-@app.route('/add', methods=['POST'])
-def add_entry():
-    if request.method == 'POST':
-        new_entry = request.form['text']
-        entry = StringEntry(text=new_entry)
-        db.session.add(entry)
-        db.session.commit()
-        update_git_repo()  # Call function to update the Git repository
-        return redirect(url_for('index'))
-
-# Function to commit and push changes to GitHub
-def update_git_repo():
-    # Ensure that the repo is in the correct directory
-    os.chdir('/path/to/your/repo')
-    
-    # Git add, commit, and push
-    subprocess.run(['git', 'add', 'database.db'])
-    subprocess.run(['git', 'commit', '-m', 'Updated database'])
-    subprocess.run(['git', 'push'])
+    # Commit changes and close the connection
+    conn.commit()
+    conn.close()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    string_to_add = os.environ.get('STRING_TO_ADD')
+    if string_to_add:
+        add_string_to_db(string_to_add)
+    else:
+        print("No string provided.")
