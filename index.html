@@ -25,11 +25,11 @@
 
             // Send the input string to a GitHub Action (through a GitHub API or webhook)
             try {
-                const response = await fetch('https://api.github.com/repos/yourusername/yourrepo/dispatches', {
+                const response = await fetch('https://api.github.com/repos/Gaene1/PageWithPython/dispatches', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer YOUR_GITHUB_PERSONAL_ACCESS_TOKEN`
+                        'Authorization': `add_string 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`
                     },
                     body: JSON.stringify({
                         event_type: 'add_string_to_db',
