@@ -31,8 +31,8 @@ jobs:
 
     - name: Commit updated database to GitHub
       run: |
-        git config --global user.email "your-email@example.com"
-        git config --global user.name "your-username"
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
         git add database.db
         git commit -m "Updated database with new string"
         git push
