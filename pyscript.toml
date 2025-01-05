@@ -1,3 +1,0 @@
-name = "Simple Panel"
-description = "A basic Panel application to be used with PyScript."
-packages = ["matplotlib=3.9.0"]
